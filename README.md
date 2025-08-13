@@ -2,6 +2,7 @@
 Follow these steps to run the project on your local machine:
 
 1️⃣ Start Docker
+
 Make sure your Docker server is running.
 
 2️⃣ Clone the Repository
