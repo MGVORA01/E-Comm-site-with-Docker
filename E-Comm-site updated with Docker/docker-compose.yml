@@ -1,0 +1,41 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: Meet@2004
+      MYSQL_DATABASE: EComm_details
+    ports:
+      - "3307:3306"  # host:container
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: "./E-Comm-site backend java"
+    container_name: java-backend-container
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: E-Comm-site
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/EComm_details
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Meet@2004
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+    depends_on:
+      - mysql
+
+  frontend:
+    build: "./E-Comm-site Frontend React"
+    container_name: react-frontend-container
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: http://backend:8080
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
